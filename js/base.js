@@ -1,5 +1,6 @@
 var STATUS = "PROD";
-var BASE_URL = STATUS === "DEV" ? "http://indigo-moon-ilfwekexk2x3.vapor-farm-b1.com/v1/" : "http://api.oston.io/oi-go/v1/";
+var PROTOCOL =  document.location.protocol;
+var BASE_URL = PROTOCOL + (STATUS === "DEV" ? "//indigo-moon-ilfwekexk2x3.vapor-farm-b1.com/v1/" : "//api.oston.io/oi-go/v1/");
 var SUBMIT = false;
 
 var LP = {
