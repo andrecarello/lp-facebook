@@ -2,6 +2,9 @@ var STATUS = "PROD";
 var PROTOCOL =  document.location.protocol;
 var BASE_URL = PROTOCOL + (STATUS === "DEV" ? "//indigo-moon-ilfwekexk2x3.vapor-farm-b1.com/v1/" : "//api.oston.io/oi-go/v1/");
 var SUBMIT = false;
+var METHOD_SELECTED = "cartao";
+var PLAN_SELECTED = "";
+var GROUP_SELECTED = "";
 
 var LP = {
     title: 'Oi Vantagens',
@@ -108,6 +111,12 @@ function hideInputMsisdn (value) {
     }
 }
 
+function setMsisdnInputValue (value) {
+    if (!!value) {
+        document.querySelector('input[name="msisdn"]').value = value.substr(2, value.length);
+    }
+}
+
 request({ url: LP.headers })
     .then(function(data) {
         let response = JSON.parse(data);
@@ -148,15 +157,21 @@ function post(obj) {
 
 
 function getPlans(ddd) {
-    request({ url: LP.baseUrl + '/sales/group-plans?area_code=' + ddd + '&orderBy=data&orderDirection=asc' })
-        .then(data => {
+
+    var linkGroupPlans = BASE_URL + "plans?areaCode=" + ddd + "&groupBy=class";
+
+    request({ url: linkGroupPlans }).then(function(data) {
             if (data.length) {
                 let response = JSON.parse(data);
                 localStorage.setItem('price', response[0].price);
                 localStorage.setItem('plans', data);
                 LP.price.innerText = localStorage.getItem('price');
+            } else {
+                throw "Nenhum plano encontrado.";
             }
-        })
+        }).catch(function(err) {
+            console.error('=> An error occurred when getPlans: ', err);
+        });
 }
 
 function ddd(msisdn) {
@@ -320,58 +335,82 @@ window.onload = function () {
         errorTextClass: 'error'
     };
 
-    var pristine = new Pristine(form, config);
+    var pristine,
+        valid;
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-
-        console.log('=> SUBMIT: ', SUBMIT);
 
         if (SUBMIT === false) {
 
             SUBMIT = true;
 
-            var valid = pristine.validate();
+            var msisdn = !document.querySelector('input[name="msisdn"]') ? localStorage.getItem('msisdn') : form.querySelector('input[name="msisdn"]').value;
 
-            console.log('=> VALID', valid);
-            console.log('=> SUBMIT: ', SUBMIT);
+            var cpf = form.querySelector('input[name="cpf"]').value,
+                birth_date = form.querySelector('select[name="bYear"]').value + '-' + form.querySelector('select[name="bMonth"]').value + '-' + form.querySelector('select[name="bDay"]').value,
+                cep = form.querySelector('input[name="cep"]').value,
+                number = form.querySelector('input[name="card_number"]').value,
+                month = form.querySelector('select[name="month"]').value,
+                year = form.querySelector('select[name="year"]').value,
+                cvv = form.querySelector('input[name="cvv"]').value,
+                referer = localStorage.getItem('REFERER'),
+                plan_id = "",
+                card_token = "";
 
-            if (valid) {
 
-                var msisdn = !document.querySelector('input[name="msisdn"]') ? localStorage.getItem('msisdn') : form.querySelector('input[name="msisdn"]').value;
+            if (PLAN_SELECTED.payment_type === "boleto") {
 
-                var cpf = form.querySelector('input[name="cpf"]').value,
-                    birth_date = form.querySelector('select[name="bYear"]').value + '-' + form.querySelector('select[name="bMonth"]').value + '-' + form.querySelector('select[name="bDay"]').value,
-                    cep = form.querySelector('input[name="cep"]').value,
-                    number = form.querySelector('input[name="card_number"]').value,
-                    month = form.querySelector('select[name="month"]').value,
-                    year = form.querySelector('select[name="year"]').value,
-                    cvv = form.querySelector('input[name="cvv"]').value,
-                    referer = localStorage.getItem('REFERER'),
-                    plan_id = "",
-                    card_token = "";
+                pristine = new Pristine(document.getElementById("formElement"), config);
+                valid = pristine.validate();
 
-                post({
-                    url: BASE_URL + "orders/" + msisdn,
-                    data: JSON.stringify({
-                        "phone": msisdn,
-                        "origin": localStorage.getItem("REFERER"),
-                        "document": cpf,
-                        "credit_card_number": number,
-                        "credit_card_expiration_year": year,
-                        "credit_card_expiration_month": month,
-                        "credit_card_cvv": cvv,
-                        "credit_card_zip": cep,
-                        "birthday": birth_date
-                    })
-                }).then(function(res) {
+                console.log('=> VALID', valid);
+                console.log('=> SUBMIT: ', SUBMIT);
+
+                if (valid) {
+                    payBoleto(form, cpf).then(function(res) {
+                        SUBMIT = false;
+                        form.reset();
+                    }).catch(function(err) {
+                        SUBMIT = false;
+                    });
+                } else {
                     SUBMIT = false;
-                    form.reset();
-                }).catch(function(err) {
-                    SUBMIT = false;
-                });
+                }
+
             } else {
-                SUBMIT = false;
+
+                pristine = new Pristine(document.getElementById("formElement"), config);
+                valid = pristine.validate();
+
+                console.log('=> VALID', valid);
+                console.log('=> SUBMIT: ', SUBMIT);
+
+                if (valid) {
+
+                    post({
+                        url: BASE_URL + "orders/" + msisdn,
+                        data: JSON.stringify({
+                            "phone": msisdn,
+                            "origin": localStorage.getItem("REFERER"),
+                            "document": cpf,
+                            "credit_card_number": number,
+                            "credit_card_expiration_year": year,
+                            "credit_card_expiration_month": month,
+                            "credit_card_cvv": cvv,
+                            "credit_card_zip": cep,
+                            "birthday": birth_date,
+                            "plan_code": PLAN_SELECTED.code
+                        })
+                    }).then(function(res) {
+                        SUBMIT = false;
+                        form.reset();
+                    }).catch(function(err) {
+                        SUBMIT = false;
+                    });
+                } else {
+                    SUBMIT = false;
+                }
             }
         }
 
@@ -379,58 +418,13 @@ window.onload = function () {
 
 };
 
-//
-// function validateForm(name) {
-//     var msisdn = document.forms["form"]["msisdn"];
-//
-//
-//
-//     return false;
-//
-//     if (msisdn === "" || msisdn.length < 11) {
-//         alert("erro");
-//         return false;
-//     }
-// }
-//
-// function validateInput(el) {
-//
-//     el.onchange = function () {
-//         var val = this.value;
-//         var next = this.nextElementSibling;
-//         next.style.display = !/[0-9]{11}/.exec(val) ? 'block' : 'none';
-//     };
-//
-//     el.onblur = function () {
-//         var next = this.nextElementSibling;
-//         next.style.display = this.value.length < this.getAttribute('maxlength') || this.value.length < this.getAttribute('minlength') ? 'block' : 'none';
-//     };
-//
-//     el.oninput = function () {
-//         this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-//     }
-// }
-//
-//
-// function formInputs() {
-//     var elem = document.querySelector('.form');
-//     for(var i = 0; i < elem.length; i++) {
-//         var span  = document.createElement("span");
-//         span.classList.add('error');
-//         span.innerText = 'erro';
-//
-//         elem[i].parentNode.insertBefore(span, elem[i].nextSibling)
-//         validateInput(elem[i])
-//     }
-// }
-// // <span class="error">Erro</span>
-// formInputs();
-
 
 function selectPlan(e, plan) {
     var text = e.querySelector('header p').innerText;
 
-
+    var plans = JSON.parse(localStorage.getItem('plans'));
+    GROUP_SELECTED = plans[plan];
+    PLAN_SELECTED  = GROUP_SELECTED[0];
 
     document.querySelector('#form').classList.toggle('active');
     document.getElementById('plan-class').innerText = text.split('\n')[0];
@@ -438,11 +432,19 @@ function selectPlan(e, plan) {
 }
 
 
-var article = function (plan) {
+var article = function (plan, index) {
 
-    return '<article class="plan" onclick="selectPlan(this, \'' + plan.id + '\')">' +
+    plan = plan[0];
+
+    var price = plan.price.split('.');
+    plan['price_broke'] = {
+        unity: price[0],
+        tenths: (price[1]).length === 1 ? price[1] + "0" : price[1]
+    };
+
+    return '<article class="plan" onclick="selectPlan(this, \'' + index + '\')">' +
         '<header>' +
-        '<p><small>'+ plan.class +'</small> '+ plan.data +'GB' +
+        '<p><small>'+ plan.name +'</small> '+ plan.data_in_gb +'GB' +
         '</p>' +
         '</header>' +
         '<div class="plan-content">' +
@@ -484,11 +486,11 @@ var articles = function(obj) {
 
     var plans = JSON.parse(obj);
     p.innerHTML = '';
-    plans.forEach(function(plan) {
+    plans.forEach(function(plan, index) {
         if ( plan.data === 4 || plan.data === 16 ) {
             return false;
         }
-        p.innerHTML += article(plan)
+        p.innerHTML += article(plan, index);
     })
 
 };
@@ -497,15 +499,68 @@ var articles = function(obj) {
 function showmethod(el) {
     var e = document.getElementsByClassName('card-method');
 
-    console.log(e)
+    var index = el === "credit_card" ? 0 : 1;
+
+    PLAN_SELECTED = GROUP_SELECTED[index];
+
     for (var i = 0; i <e.length; i++) {
-        var t = e[i]
+        var t = e[i];
         if ( el === 'boleto' ) {
+            disableRequiredCreditCardFields();
             t.style.display = 'none';
         } else if ( el === 'cartao' ) {
+            enableRequiredCreditCardFields();
             t.style.display = 'block';
         }
     }
 
 
+}
+
+function payBoleto (form, document) {
+    var msisdn = !localStorage.getItem('msisdn') ? form.querySelector('input[name="msisdn"]').value : localStorage.getItem('msisdn'),
+        referer = localStorage.getItem('REFERER'),
+        cpf = form.querySelector('input[name="cpf"]').value;
+
+    return post({
+        url: BASE_URL + "orders/" + msisdn,
+        data: JSON.stringify({
+            "phone": msisdn,
+            "origin": referer,
+            "document": cpf,
+            "plan_code": PLAN_SELECTED.code
+        })
+    });
+}
+
+function enableRequiredCreditCardFields() {
+
+    if (localStorage.getItem('msisdn')) {
+        setMsisdnInputValue(localStorage.getItem('msisdn'));
+    }
+
+    var elements = document.getElementsByClassName('only-credit_card');
+
+    for (var i = 0; i < elements.length; i++) {
+        var currentElement = elements[i];
+
+        currentElement.setAttribute('required', 'required');
+        currentElement.setAttribute('data-pristine-required-message', 'Campo obrigatório');
+    }
+}
+
+function disableRequiredCreditCardFields () {
+
+    if (localStorage.getItem('msisdn')) {
+        setMsisdnInputValue(localStorage.getItem('msisdn'));
+    }
+
+    var elements = document.getElementsByClassName('only-credit_card');
+
+    for (var i = 0; i < elements.length; i++) {
+        var currentElement = elements[i];
+
+        currentElement.removeAttribute('required');
+        currentElement.removeAttribute('data-pristine-required-message');
+    }
 }

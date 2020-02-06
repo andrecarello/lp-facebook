@@ -236,15 +236,15 @@
                     <div class="group required card-method">
                         <label>Data de Nascimento</label>
                         <div class="date">
-                            <select name="bDay" id="dia" required data-pristine-required-message="Campo obrigatório">
+                            <select name="bDay" class="only-credit_card" id="dia" required data-pristine-required-message="Campo obrigatório">
                                 <option value="" selected disabled>Dia</option>
                             </select>
                             <div class="slash">/</div>
-                            <select name="bMonth" id="mes" required data-pristine-required-message="Campo obrigatório">
+                            <select name="bMonth" class="only-credit_card" id="mes" required data-pristine-required-message="Campo obrigatório">
                                 <option value="" selected disabled>Mês</option>
                             </select>
                             <div class="slash">/</div>
-                            <select name="bYear" id="ano" required data-pristine-required-message="Campo obrigatório">
+                            <select name="bYear" class="only-credit_card" id="ano" required data-pristine-required-message="Campo obrigatório">
                                 <option value="" selected disabled>Ano</option>
                             </select>
 
@@ -253,20 +253,20 @@
 
                     <div class="group required card-method">
                         <label>CEP</label>
-                        <input name="cep" type="text" minlength="8" maxlength="8" required
+                        <input name="cep" class="only-credit_card" type="text" minlength="8" maxlength="8" required
                             data-pristine-required-message="Campo obrigatório">
                     </div>
 
                     <div class="group required invert card-method">
                         <label>Número do Cartão</label>
-                        <input name="card_number" type="text" minlength="16" maxlength="16" required
+                        <input name="card_number" class="only-credit_card" type="text" minlength="16" maxlength="16" required
                             data-pristine-required-message="Campo obrigatório">
                     </div>
 
                     <div class="cols" size="2">
                         <div class="group required invert card-method">
                             <label>Mês de Expiração</label>
-                            <select name="month" id="mes-expiracao" required
+                            <select name="month" class="only-credit_card" id="mes-expiracao" required
                                 data-pristine-required-message="Campo obrigatório">
                                 <option value="" selected disabled>Mês</option>
                             </select>
@@ -274,7 +274,7 @@
 
                         <div class="group required invert card-method">
                             <label>Ano de Expiração</label>
-                            <select name="year" id="ano-expiracao" required
+                            <select name="year" class="only-credit_card" id="ano-expiracao" required
                                 data-pristine-required-message="Campo obrigatório">
                                 <option value="" selected disabled>Ano</option>
                             </select>
@@ -284,7 +284,7 @@
                     <div class="cols" size="2">
                         <div class="group required invert card-method">
                             <label>Cód. segurança</label>
-                            <input name="cvv" type="text" required data-pristine-required-message="Campo obrigatório">
+                            <input name="cvv" type="text" class="only-credit_card" required data-pristine-required-message="Campo obrigatório">
                         </div>
                     </div>
 
