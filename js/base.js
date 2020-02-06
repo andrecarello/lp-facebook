@@ -1,10 +1,13 @@
+var STATUS = "PROD";
+var BASE_URL = STATUS === "DEV" ? "http://indigo-moon-ilfwekexk2x3.vapor-farm-b1.com/v1/" : "http://api.oston.io/oi-go/v1/";
+var SUBMIT = false;
 
-const LP = {
+var LP = {
     title: 'Oi Vantagens',
     headers: 'http://clic.news/headers/',
     baseUrl: 'http://api.oston.io/oi-fidelidade/v2',
-    analytics_url: 'http://api.oston.io/analytics',
-    analytics_status: false,
+    analytics_url: BASE_URL + "interactions",
+    analytics_status: true,
     msisdn: '',
     ddd: '',
     price: document.getElementById('price'),
@@ -26,13 +29,15 @@ LP.price.innerText = localStorage.getItem('price');
 localStorage.setItem('REFERER', LP.ref);
 
 
-window.onload = function () {
-    analytics({
-        from: '/',
-        to: '/fb',
-        gaFrom: '',
-        gaTo: 'lp-facebook'
-    })
+document.onreadystatechange = function () {
+    if (document.readyState == "interactive") {
+        analytics({
+            from: '/',
+            to: '/fb',
+            gaFrom: '',
+            gaTo: 'lp-facebook'
+        })
+    }
 };
 
 function currentOS() {
@@ -91,20 +96,30 @@ function request(obj) {
     });
 }
 
+function hideInputMsisdn (value) {
+    var msisdnElement = document.getElementById('msisdn');
+    msisdnElement.style.visibility = "hidden";
+    msisdnElement.style.opacity = "0";
+    msisdnElement.style.height = "0";
+
+    if (!!value) {
+        document.querySelector('input[name="msisdn"]').value = value.substr(2, value.length);
+    }
+}
+
 request({ url: LP.headers })
-    .then(data => {
+    .then(function(data) {
         let response = JSON.parse(data);
 
         if (response.Msisdn) {
             localStorage.setItem('msisdn', response.Msisdn);
             getPlans(ddd(response.Msisdn));
-            document.getElementById('msisdn').remove();
+            hideInputMsisdn(response.Msisdn);
         } else {
             throw "msisdn não encontrado";
         }
     })
-    .catch(error => {
-        console.log(error);
+    .catch(function(err) {
         LP.price.innerText = '34,99';
     });
 
@@ -137,7 +152,6 @@ function getPlans(ddd) {
             if (data.length) {
                 let response = JSON.parse(data);
                 localStorage.setItem('price', response[0].price);
-                toggleElements();
                 LP.price.innerText = localStorage.getItem('price');
             }
         })
@@ -145,23 +159,6 @@ function getPlans(ddd) {
 
 function ddd(msisdn) {
     return msisdn.substring(2, 4);
-}
-
-function redirect(obj) {
-    if (!obj.page) {
-        document.querySelector(obj.target).classList.toggle('active');
-    } else {
-        window.open(obj.url, "_blank")
-    }
-
-    if (!!obj.analytics) {
-        analytics({
-            to: obj.analytics.to,
-            from: obj.analytics.from,
-            gaTo: obj.analytics.gaTo,
-            gaFrom: obj.analytics.gaFrom
-        })
-    }
 }
 
 function analytics(obj) {
@@ -335,81 +332,57 @@ window.onload = function () {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        // check if the form is valid
-        var valid = pristine.validate(); // returns true or false
+        console.log('=> SUBMIT: ', SUBMIT);
 
-        if (valid) {
+        if (SUBMIT === false) {
 
-            let data = {
-                msisdn: form.querySelector('input[name="msisdn"]').value.length ? localStorage.getItem('Msisdn') : form.querySelector('input[name="msisdn"]').value,
-                cpf: form.querySelector('input[name="cpf"]').value,
-                birth_date: form.querySelector('select[name="bDay"]').value + '/' + form.querySelector('select[name="bMonth"]').value + '/' + form.querySelector('select[name="bYear"]').value,
-                cep: form.querySelector('input[name="cep"]').value,
-                number: form.querySelector('input[name="card_number"]').value,
-                month: form.querySelector('select[name="month"]').value,
-                year: form.querySelector('select[name="year"]').value,
-                cvv: form.querySelector('input[name="cvv"]').value,
-                referer: localStorage.getItem('REFERER') ? localStorage.getItem('REFERER') : REFERER,
-                utm_campaign: "",
-                utm_medium: "",
-                plan_id: "",
-                card_token: ""
+            SUBMIT = true;
+
+
+            var valid = pristine.validate(); // returns true or false
+
+            console.log('=> VALID', valid);
+            console.log('=> SUBMIT: ', SUBMIT);
+
+            if (valid) {
+
+                var msisdn = !document.querySelector('input[name="msisdn"]') ? localStorage.getItem('msisdn') : form.querySelector('input[name="msisdn"]').value;
+
+                var cpf = form.querySelector('input[name="cpf"]').value,
+                    birth_date = form.querySelector('select[name="bYear"]').value + '-' + form.querySelector('select[name="bMonth"]').value + '-' + form.querySelector('select[name="bDay"]').value,
+                    cep = form.querySelector('input[name="cep"]').value,
+                    number = form.querySelector('input[name="card_number"]').value,
+                    month = form.querySelector('select[name="month"]').value,
+                    year = form.querySelector('select[name="year"]').value,
+                    cvv = form.querySelector('input[name="cvv"]').value,
+                    referer = localStorage.getItem('REFERER'),
+                    plan_id = "",
+                    card_token = "";
+
+                post({
+                    url: BASE_URL + "orders/" + msisdn,
+                    data: JSON.stringify({
+                        "phone": msisdn,
+                        "origin": localStorage.getItem("REFERER"),
+                        "document": cpf,
+                        "credit_card_number": number,
+                        "credit_card_expiration_year": year,
+                        "credit_card_expiration_month": month,
+                        "credit_card_cvv": cvv,
+                        "credit_card_zip": cep,
+                        "birthday": birth_date
+                    })
+                }).then(function(res) {
+                    SUBMIT = false;
+                    form.reset();
+                }).catch(function(err) {
+                    SUBMIT = false;
+                });
+            } else {
+                SUBMIT = false;
             }
-
-            console.log(data)
-            // post({
-            //     url: '/',
-            //     data: JSON.stringify(data)
-            // })
         }
 
     });
 
 };
-
-//
-// function validateForm(name) {
-//     var msisdn = document.forms["form"]["msisdn"];
-//
-//
-//
-//     return false;
-//
-//     if (msisdn === "" || msisdn.length < 11) {
-//         alert("erro");
-//         return false;
-//     }
-// }
-//
-// function validateInput(el) {
-//
-//     el.onchange = function () {
-//         var val = this.value;
-//         var next = this.nextElementSibling;
-//         next.style.display = !/[0-9]{11}/.exec(val) ? 'block' : 'none';
-//     };
-//
-//     el.onblur = function () {
-//         var next = this.nextElementSibling;
-//         next.style.display = this.value.length < this.getAttribute('maxlength') || this.value.length < this.getAttribute('minlength') ? 'block' : 'none';
-//     };
-//
-//     el.oninput = function () {
-//         this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-//     }
-// }
-//
-//
-// function formInputs() {
-//     var elem = document.querySelector('.form');
-//     for(var i = 0; i < elem.length; i++) {
-//         var span  = document.createElement("span");
-//         span.classList.add('error');
-//         span.innerText = 'erro';
-//
-//         elem[i].parentNode.insertBefore(span, elem[i].nextSibling)
-//         validateInput(elem[i])
-//     }
-// }
-// // <span class="error">Erro</span>
-// formInputs();
