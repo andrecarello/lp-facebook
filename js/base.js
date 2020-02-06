@@ -94,10 +94,9 @@ function request(obj) {
 request({ url: LP.headers })
     .then(data => {
         let response = JSON.parse(data);
-
+        getPlans(ddd(response.Msisdn));
         if (response.Msisdn) {
             localStorage.setItem('msisdn', response.Msisdn);
-            getPlans(ddd(response.Msisdn));
             document.getElementById('msisdn').remove();
         } else {
             throw "msisdn não encontrado";
@@ -137,14 +136,14 @@ function getPlans(ddd) {
             if (data.length) {
                 let response = JSON.parse(data);
                 localStorage.setItem('price', response[0].price);
-                toggleElements();
+                localStorage.setItem('plans', data);
                 LP.price.innerText = localStorage.getItem('price');
             }
         })
 }
 
 function ddd(msisdn) {
-    return msisdn.substring(2, 4);
+    return msisdn ? msisdn.substring(2, 4) : '';
 }
 
 function redirect(obj) {
@@ -153,6 +152,8 @@ function redirect(obj) {
     } else {
         window.open(obj.url, "_blank")
     }
+
+    articles(localStorage.getItem('plans'));
 
     if (!!obj.analytics) {
         analytics({
@@ -291,7 +292,7 @@ function select(elem, size) {
 
     for (var i = size.min; i <= size.max; i++) {
         var option = document.createElement("option");
-        console.log(size.min)
+        console.log(size.min);
         if (i < 10) {
             option.value = '0' + i.toString();
             option.text = '0' + i.toString();
@@ -354,7 +355,7 @@ window.onload = function () {
                 utm_medium: "",
                 plan_id: "",
                 card_token: ""
-            }
+            };
 
             console.log(data)
             // post({
@@ -413,3 +414,87 @@ window.onload = function () {
 // }
 // // <span class="error">Erro</span>
 // formInputs();
+
+
+function selectPlan(e, plan) {
+    var text = e.querySelector('header p').innerText;
+
+
+
+    document.querySelector('#form').classList.toggle('active');
+    document.getElementById('plan-class').innerText = text.split('\n')[0];
+    document.getElementById('plan-data').innerText = text.split('\n')[1];
+}
+
+
+var article = function (plan) {
+
+    return '<article class="plan" onclick="selectPlan(this, \'' + plan.id + '\')">' +
+        '<header>' +
+        '<p><small>'+ plan.class +'</small> '+ plan.data +'GB' +
+        '</p>' +
+        '</header>' +
+        '<div class="plan-content">' +
+        '<p>Apps sem descontar da internet</p>' +
+        '<div class="apps">' +
+        apps(plan.apps) +
+        '</div>' +
+        '<hr>' +
+        '</div>' +
+        '<footer>' +
+        '<div class="price">R$' +
+        '<div class="decimals">'+ plan.price_broke.unity +'</div>' +
+        '<div class="units"><div>,'+ plan.price_broke.tenths +'</div>/Mês</div>' +
+        '</div>' +
+        '<div class="button">Quero Agora</div>' +
+        '<p>*No cartão de crédito</p>' +
+        '</footer>' +
+        '</article>'
+};
+
+var apps = function (apps) {
+    var a = '';
+    if (apps.toLowerCase().includes('whatsapp'))
+        a += '<figure><img src="/images/whatsapp-icon.svg" alt="Whatsapp"></figure>';
+    if (apps.toLowerCase().includes('messenger'))
+        a += '<figure><img src="/images/messenger-icon.svg" alt="Messenger"></figure>';
+    if (apps.toLowerCase().includes('instagram'))
+        a += '<figure><img src="/images/instagram-icon.svg" alt="Instagram"></figure>';
+    if (apps.toLowerCase().includes('netflix'))
+        a += '<figure><img src="/images/netflix-icon.svg" alt=""></figure>';
+    if (apps.toLowerCase().includes('facebook'))
+        a += '<figure><img src="/images/facebook-icon.svg" alt=""></figure>';
+
+    return a;
+};
+
+var p = document.querySelector('#plans .content');
+var articles = function(obj) {
+
+    var plans = JSON.parse(obj);
+    p.innerHTML = '';
+    plans.forEach(function(plan) {
+        if ( plan.data === 4 || plan.data === 16 ) {
+            return false;
+        }
+        p.innerHTML += article(plan)
+    })
+
+};
+
+
+function showmethod(el) {
+    var e = document.getElementsByClassName('card-method');
+
+    console.log(e)
+    for (var i = 0; i <e.length; i++) {
+        var t = e[i]
+        if ( el === 'boleto' ) {
+            t.style.display = 'none';
+        } else if ( el === 'cartao' ) {
+            t.style.display = 'block';
+        }
+    }
+
+
+}
