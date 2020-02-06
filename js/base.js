@@ -228,9 +228,6 @@ function generateCookie() {
     return this;
 }
 
-/**
- * @return {string}
- */
 function Uuid() {
 
     let uuid = '', ii;
@@ -283,13 +280,12 @@ function sms() {
 }
 
 function select(elem, size) {
-    //Create and append the options
 
     size.min = size.min || 1;
 
     for (var i = size.min; i <= size.max; i++) {
         var option = document.createElement("option");
-        console.log(size.min)
+        console.log(size.min);
         if (i < 10) {
             option.value = '0' + i.toString();
             option.text = '0' + i.toString();
@@ -315,19 +311,14 @@ window.onload = function () {
     var form = document.getElementById("formElement");
 
     let config = {
-        // class of the parent element where the error/success class is added
         classTo: 'required',
         errorClass: 'has-danger',
         successClass: 'has-success',
-        // class of the parent element where error text element is appended
         errorTextParent: 'required',
-        // type of element to create for the error text
         errorTextTag: 'span',
-        // class of the error text element
         errorTextClass: 'error'
     };
 
-    // create the pristine instance
     var pristine = new Pristine(form, config);
 
     form.addEventListener('submit', function (e) {
@@ -340,7 +331,7 @@ window.onload = function () {
             SUBMIT = true;
 
 
-            var valid = pristine.validate(); // returns true or false
+            var valid = pristine.validate();
 
             console.log('=> VALID', valid);
             console.log('=> SUBMIT: ', SUBMIT);
