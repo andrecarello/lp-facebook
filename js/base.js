@@ -369,6 +369,11 @@ window.onload = function () {
 
                 if (valid) {
                     payBoleto(form, cpf).then(function(res) {
+
+                        flashMessage('Seu pedido foi efetuado com sucesso, você irá receber um SMS com instruções');
+
+                        goHome();
+
                         SUBMIT = false;
                         form.reset();
                     }).catch(function(err) {
@@ -403,6 +408,10 @@ window.onload = function () {
                             "plan_code": PLAN_SELECTED.code
                         })
                     }).then(function(res) {
+                        flashMessage('Seu pedido foi efetuado com sucesso, você irá receber um SMS com instruções');
+
+                        goHome();
+
                         SUBMIT = false;
                         form.reset();
                     }).catch(function(err) {
@@ -563,4 +572,27 @@ function disableRequiredCreditCardFields () {
         currentElement.removeAttribute('required');
         currentElement.removeAttribute('data-pristine-required-message');
     }
+}
+
+function flashMessage(message) {
+    var notify = document.getElementById('notify');
+    var p = notify.querySelector('p');
+
+    p.innerText = message;
+
+    notify.classList.add('active');
+}
+
+(function(){
+    if (localStorage.getItem('message')) {
+
+        flashMessage(localStorage.getItem('message'));
+
+        localStorage.removeItem('message');
+    }
+})();
+
+function goHome () {
+    redirect({page: false, target: '#form'});
+    redirect({page: false, target: '#plans'});
 }
