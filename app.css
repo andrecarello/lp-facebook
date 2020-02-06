@@ -679,3 +679,45 @@ p {
 .radio .radio-input label input{
     margin-right: 5px;
 }
+
+.response{
+    position: fixed;
+    left: 15px;
+    right: 15px;
+    bottom: 10px;
+    background-color: #fff;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.16);
+    z-index: 9999;
+    max-width: 412px;
+    min-height: 60px;
+    padding: 0 10px;
+    border-radius: 4px;
+    margin: 0 auto;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all .2s ease-in-out;
+}
+
+.response > div{
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.response.success{
+    background-color: #09BC8A;
+}
+.response.error{
+    background-color: #AA1155;
+}
+.response.error > div p,
+.response.success > div p {
+    color: #ffffff;
+}
+
+.response.active{
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
