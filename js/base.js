@@ -28,10 +28,10 @@ localStorage.setItem('REFERER', LP.ref);
 
 window.onload = function () {
     analytics({
-            from: '/',
-            to: '/fb',
-            gaFrom: '',
-            gaTo: 'lp-facebook'
+        from: '/',
+        to: '/fb',
+        gaFrom: '',
+        gaTo: 'lp-facebook'
     })
 };
 
@@ -91,37 +91,31 @@ function request(obj) {
     });
 }
 
-request({url: LP.headers})
-    .then( data => {
+request({ url: LP.headers })
+    .then(data => {
         let response = JSON.parse(data);
 
-        if( response.Msisdn ){
+        if (response.Msisdn) {
             localStorage.setItem('msisdn', response.Msisdn);
             getPlans(ddd(response.Msisdn));
+            document.getElementById('msisdn').remove();
         } else {
             throw "msisdn não encontrado";
         }
     })
     .catch(error => {
         console.log(error);
-        toggleElements();
         LP.price.innerText = '34,99';
     });
 
-
-function toggleElements() {
-    LP.loading.classList.remove('active');
-    LP.body.classList.add('active');
-}
-
 function post(obj) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
 
         var req = new XMLHttpRequest();
         req.open('post', obj.url);
 
         req.setRequestHeader('Content-Type', 'application/json');
-        req.onload = function() {
+        req.onload = function () {
             if (req.status === 200) {
                 resolve(req.response);
             } else {
@@ -129,7 +123,7 @@ function post(obj) {
             }
         };
 
-        req.onerror = function() {
+        req.onerror = function () {
             reject(Error("Network Error"));
         };
         req.send(obj.data);
@@ -138,9 +132,9 @@ function post(obj) {
 
 
 function getPlans(ddd) {
-    request({url: LP.baseUrl + '/sales/group-plans?area_code=' + ddd + '&orderBy=data&orderDirection=asc'})
-        .then( data => {
-            if ( data.length ) {
+    request({ url: LP.baseUrl + '/sales/group-plans?area_code=' + ddd + '&orderBy=data&orderDirection=asc' })
+        .then(data => {
+            if (data.length) {
                 let response = JSON.parse(data);
                 localStorage.setItem('price', response[0].price);
                 toggleElements();
@@ -154,13 +148,13 @@ function ddd(msisdn) {
 }
 
 function redirect(obj) {
-    if( !obj.page ){
+    if (!obj.page) {
         document.querySelector(obj.target).classList.toggle('active');
     } else {
         window.open(obj.url, "_blank")
     }
 
-    if( !!obj.analytics ) {
+    if (!!obj.analytics) {
         analytics({
             to: obj.analytics.to,
             from: obj.analytics.from,
@@ -189,7 +183,7 @@ function analytics(obj) {
         balance: 0
     };
 
-    if ( LP.analytics_status ) {
+    if (LP.analytics_status) {
         post({
             url: LP.analytics_url,
             data: JSON.stringify(_schema)
@@ -197,7 +191,7 @@ function analytics(obj) {
     }
 }
 
-function setupAnonymous () {
+function setupAnonymous() {
 
     if (!hasAnonymousID()) {
         generateAnonymous();
@@ -208,15 +202,15 @@ function setupAnonymous () {
     return getAnonymous();
 }
 
-function hasAnonymousID () {
+function hasAnonymousID() {
     return !!localStorage.getItem(LP.code);
 }
 
-function getAnonymous () {
+function getAnonymous() {
     return localStorage.getItem(LP.code);
 }
 
-function generateAnonymous () {
+function generateAnonymous() {
 
     LP.uuid = Uuid();
 
@@ -226,12 +220,12 @@ function generateAnonymous () {
     return this;
 }
 
-function generateLocalStorage () {
+function generateLocalStorage() {
     localStorage.setItem(LP.code, Uuid());
     return this;
 }
 
-function generateCookie () {
+function generateCookie() {
     document.cookie = LP.code + '=' + getAnonymous();
     return this;
 }
@@ -239,7 +233,7 @@ function generateCookie () {
 /**
  * @return {string}
  */
-function Uuid () {
+function Uuid() {
 
     let uuid = '', ii;
     for (ii = 0; ii < 32; ii += 1) {
@@ -295,10 +289,10 @@ function select(elem, size) {
 
     size.min = size.min || 1;
 
-    for(var i = size.min; i <= size.max; i++){
+    for (var i = size.min; i <= size.max; i++) {
         var option = document.createElement("option");
         console.log(size.min)
-        if ( i < 10 ){
+        if (i < 10) {
             option.value = '0' + i.toString();
             option.text = '0' + i.toString();
         } else {
@@ -310,12 +304,12 @@ function select(elem, size) {
     }
 }
 
-select('#dia', {max: 31});
-select('#mes', {max: 12});
-select('#ano', {min: 1950, max: 2000});
+select('#dia', { max: 31 });
+select('#mes', { max: 12 });
+select('#ano', { min: 1950, max: 2000 });
 
-select('#mes-expiracao', {max: 12});
-select('#ano-expiracao', {min: 2020, max: 2035});
+select('#mes-expiracao', { max: 12 });
+select('#ano-expiracao', { min: 2020, max: 2035 });
 
 
 window.onload = function () {
@@ -324,11 +318,11 @@ window.onload = function () {
 
     let config = {
         // class of the parent element where the error/success class is added
-        classTo: 'group',
+        classTo: 'required',
         errorClass: 'has-danger',
         successClass: 'has-success',
         // class of the parent element where error text element is appended
-        errorTextParent: 'group',
+        errorTextParent: 'required',
         // type of element to create for the error text
         errorTextTag: 'span',
         // class of the error text element
@@ -344,9 +338,33 @@ window.onload = function () {
         // check if the form is valid
         var valid = pristine.validate(); // returns true or false
 
-        console.log(valid)
+        if (valid) {
+
+            let data = {
+                msisdn: form.querySelector('input[name="msisdn"]').value.length ? localStorage.getItem('Msisdn') : form.querySelector('input[name="msisdn"]').value,
+                cpf: form.querySelector('input[name="cpf"]').value,
+                birth_date: form.querySelector('select[name="bDay"]').value + '/' + form.querySelector('select[name="bMonth"]').value + '/' + form.querySelector('select[name="bYear"]').value,
+                cep: form.querySelector('input[name="cep"]').value,
+                number: form.querySelector('input[name="card_number"]').value,
+                month: form.querySelector('select[name="month"]').value,
+                year: form.querySelector('select[name="year"]').value,
+                cvv: form.querySelector('input[name="cvv"]').value,
+                referer: localStorage.getItem('REFERER') ? localStorage.getItem('REFERER') : REFERER,
+                utm_campaign: "",
+                utm_medium: "",
+                plan_id: "",
+                card_token: ""
+            }
+
+            console.log(data)
+            // post({
+            //     url: '/',
+            //     data: JSON.stringify(data)
+            // })
+        }
 
     });
+
 };
 
 //
