@@ -6,59 +6,39 @@
     <title></title>
 
     <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="app.css">
-    <script type="text/javascript">
-        function redirect(obj) {
-            if (!obj.page) {
-                document.querySelector(obj.target).classList.toggle('active');
-            } else {
-                window.open(obj.url, "_blank")
-            }
-
-            articles(localStorage.getItem('plans'));
-
-            if (!!obj.analytics) {
-                analytics({
-                    to: obj.analytics.to,
-                    from: obj.analytics.from,
-                    gaTo: obj.analytics.gaTo,
-                    gaFrom: obj.analytics.gaFrom
-                })
-            }
-        }
-    </script>
 </head>
 
 <body>
-    <!-- BEGIN: LOADING -->
-    <!-- <section view="loading" class="active">
+<!-- BEGIN: LOADING -->
+<!-- <section view="loading" class="active">
+    <img src="/images/OI.svg" alt="">
+    <p>Aguarde</p>
+</section> -->
+<!-- END: LOADING -->
+
+<!-- BEGIN: HOME -->
+<div view="home" class="active">
+    <header>
         <img src="/images/OI.svg" alt="">
-        <p>Aguarde</p>
-    </section> -->
-    <!-- END: LOADING -->
+        <h1>
+            Seus créditos<br />
+            acabaram
+        </h1>
+    </header>
+    <section class="content">
+        <img src="/images/option-icon.svg" alt="">
+        <h3>
+            Para continuar navegando, vendo fotos e vídeos, escolha uma opção:
+        </h3>
+    </section>
 
-    <!-- BEGIN: HOME -->
-    <div view="home" class="active">
-        <header>
-            <img src="/images/OI.svg" alt="">
-            <h1>
-                Seus créditos<br />
-                acabaram
-            </h1>
-        </header>
-        <section class="content">
-            <img src="/images/option-icon.svg" alt="">
-            <h3>
-                Para continuar navegando, vendo fotos e vídeos, escolha uma opção:
-            </h3>
-        </section>
-
-        <section class="links">
-            <div class="row">
-                <a onclick="redirect({
+    <section class="links">
+        <div class="row">
+            <a onclick="redirect({
                                 page: true,
                                 url: 'https://www.oi.com.br/recarga',
                                 analytics: {
@@ -68,15 +48,15 @@
                                     gaFrom: 'fb'
                                 }
                             })" target="_blank" class="button" title="Recarga">
-                    <img src="/images/recharge-icon.svg" alt="Recarga">
-                    <span>Recarga</span>
-                </a>
-                <p>
-                    Recargas a partir de R$14 pelo cartão de crédito
-                </p>
-            </div>
-            <div class="row">
-                <a onclick="redirect({
+                <img src="/images/recharge-icon.svg" alt="Recarga">
+                <span>Recarga</span>
+            </a>
+            <p>
+                Recargas a partir de R$14 pelo cartão de crédito
+            </p>
+        </div>
+        <div class="row">
+            <a onclick="redirect({
                                 page: false,
                                 target: '#plans',
                                 analytics: {
@@ -85,17 +65,17 @@
                                     gaTo: 'plans',
                                     gaFrom: 'fb'
                                 }
-                            })" target="_blank" class="button" title="Migrar para Oi Controle">
-                    <img src="/images/migration-icon.svg" class="white-color" alt="Migrar para Oi Controle">
-                    <span>Migrar para Oi Controle</span>
-                </a>
-                <p>
-                    Tenha mais Internet + Apps liberados + minutos ilimitados a partir de R$<span
-                        id="price">34,99</span>/mês sem fidelidade
-                </p>
-            </div>
-            <div class="row">
-                <a onclick="redirect({
+                            })" target="_blank" class="button migre-controle" title="Migrar para Oi Controle" style="pointer-events: none; touch-action: none; opacity: 0.7">
+                <img src="/images/migration-icon.svg" alt="Migrar para Oi Controle">
+                <span>Migrar para Oi Controle</span>
+            </a>
+            <p>
+                Tenha mais Internet + Apps liberados + minutos ilimitados a partir de R$<span
+                    id="price">34,99</span>/mês sem fidelidade
+            </p>
+        </div>
+        <div class="row">
+            <a onclick="redirect({
                                 page: false,
                                 target: '#adiantamento-recarga',
                                 analytics: {
@@ -105,247 +85,316 @@
                                     gaFrom:'fb'
                                 }
                             })" class="button" title="Adiantamento de Recarga">
-                    <img src="/images/advance-migration-icon.svg" class="white-color" alt="Adiantamento de Recarga">
-                    <span>Adiantamento de Recarga</span>
-                </a>
-                <p>
-                    Receba R$5 de recarga emergencial
+                <img src="/images/advance-migration-icon.svg" class="white-color" alt="Adiantamento de Recarga">
+                <span>Adiantamento de Recarga</span>
+            </a>
+            <p>
+                Receba R$5 de recarga emergencial
+            </p>
+        </div>
+    </section>
+</div>
+<!-- END: HOME -->
+
+<!-- BEGIN: MODAL -->
+<div view="modal" id="adiantamento-recarga">
+    <div>
+        <header>
+            <img src="/images/OI.svg" alt="">
+            <h1>
+                Adiantamento<br />
+                de Recarga
+            </h1>
+            <a class="close" onclick="redirect({page: false, target: '#adiantamento-recarga'})">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18.008" height="18.008" viewBox="0 0 18.008 18.008">
+                    <g id="Group_1639" data-name="Group 1639" transform="translate(-286 -14)">
+                        <rect id="Rectangle_347" data-name="Rectangle 347" width="1.498" height="23.969"
+                              transform="translate(302.949 14) rotate(45)" fill="#FF6D00" />
+                        <rect id="Rectangle_348" data-name="Rectangle 348" width="1.498" height="23.969"
+                              transform="translate(286 15.059) rotate(-45)" fill="#FF6D00" />
+                    </g>
+                </svg>
+            </a>
+        </header>
+        <section class="content">
+            <p style="margin-bottom: 0;">
+                A Oi te adianta R$ 5,00 de recarga para você usar como quiser e na próxima recarga, você será
+                debitado
+                em apenas R$7,00 (R$5,00 do Adiantamento + R$2,00 de taxa de conveniência).
+            </p>
+            <p style="margin-top: 0;">
+                Para contratar este serviço agora, envie um SMS com a palavra Oi para 3333 e aguarde o SMS de
+                confirmação.
+            </p>
+
+            <a onclick="sms()" class="button" title="Eu quero">
+                <span>Enviar SMS para contratar</span>
+            </a>
+        </section>
+    </div>
+</div>
+<!-- END: MODAL -->
+
+<!-- BEGIN: MODAL -->
+<div view="modal" id="plans">
+    <div>
+        <header>
+            <img src="/images/OI.svg" alt="">
+            <h1>
+                é muito fácil<br />
+                <span>ser controle</span>
+            </h1>
+            <a class="close" onclick="redirect({page: false, target: '#plans'})">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18.008" height="18.008" viewBox="0 0 18.008 18.008">
+                    <g id="Group_1639" data-name="Group 1639" transform="translate(-286 -14)">
+                        <rect id="Rectangle_347" data-name="Rectangle 347" width="1.498" height="23.969"
+                              transform="translate(302.949 14) rotate(45)" fill="#FF6D00" />
+                        <rect id="Rectangle_348" data-name="Rectangle 348" width="1.498" height="23.969"
+                              transform="translate(286 15.059) rotate(-45)" fill="#FF6D00" />
+                    </g>
+                </svg>
+            </a>
+        </header>
+        <section class="plans content">
+        </section>
+    </div>
+</div>
+<!-- END: MODAL -->
+
+<!-- BEGIN: FORM -->
+<div view="modal" id="form">
+    <div>
+        <header>
+            <img src="/images/OI.svg" alt="">
+            <h1>
+                OI MAIS CONTROLE<br />
+                <span><i id="plan-class"></i> <i id="plan-data"></i></span>
+                <small>Preencha seus dados para <br />confirmar a contratação:</small>
+            </h1>
+            <a class="close" onclick="redirect({page: false, target: '#form'})">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18.008" height="18.008" viewBox="0 0 18.008 18.008">
+                    <g id="Group_1639" data-name="Group 1639" transform="translate(-286 -14)">
+                        <rect id="Rectangle_347" data-name="Rectangle 347" width="1.498" height="23.969"
+                              transform="translate(302.949 14) rotate(45)" fill="#FF6D00" />
+                        <rect id="Rectangle_348" data-name="Rectangle 348" width="1.498" height="23.969"
+                              transform="translate(286 15.059) rotate(-45)" fill="#FF6D00" />
+                    </g>
+                </svg>
+            </a>
+        </header>
+        <section class="content">
+            <form id="formElement" novalidate name="form" method="post">
+
+                <div class="radio" id="radio">
+                    <div class="title">Método</div>
+                    <div class="radio-input">
+                        <label for="metodo-cartao" onclick="showmethod('cartao')">
+                            <input type="radio" id="metodo-cartao" name="method" value="cartao" checked>
+                            Cartão
+                        </label>
+                    </div>
+                    <div class="radio-input">
+                        <label for="metodo-boleto" onclick="showmethod('boleto')">
+                            <input type="radio" id="metodo-boleto" name="method" value="boleto">
+                            Boleto
+                        </label>
+                    </div>
+                </div>
+
+                <div class="group required" id="msisdn">
+                    <label>Telefone</label>
+                    <input type="text" name="msisdn" required maxlength="11" minlength="11"
+                           data-pristine-required-message="Campo obrigatório">
+                </div>
+
+                <div class="group required">
+                    <label>Número do cpf</label>
+                    <input name="cpf" type="text" required minlength="11" maxlength="11"
+                           data-pristine-required-message="Campo obrigatório">
+                </div>
+
+                <div class="group required card-method">
+                    <label>Data de Nascimento</label>
+                    <div class="date">
+                        <select name="bDay" class="only-credit_card" id="dia" required data-pristine-required-message="Campo obrigatório">
+                            <option value="" selected disabled>Dia</option>
+                        </select>
+                        <div class="slash">/</div>
+                        <select name="bMonth" class="only-credit_card" id="mes" required data-pristine-required-message="Campo obrigatório">
+                            <option value="" selected disabled>Mês</option>
+                        </select>
+                        <div class="slash">/</div>
+                        <select name="bYear" class="only-credit_card" id="ano" required data-pristine-required-message="Campo obrigatório">
+                            <option value="" selected disabled>Ano</option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="group required card-method">
+                    <label>CEP</label>
+                    <input name="cep" class="only-credit_card" type="text" minlength="8" maxlength="8" required
+                           data-pristine-required-message="Campo obrigatório">
+                </div>
+
+                <div class="group required invert card-method">
+                    <label>Número do Cartão</label>
+                    <input name="card_number" class="only-credit_card" type="text" minlength="16" maxlength="16" required
+                           data-pristine-required-message="Campo obrigatório">
+                </div>
+
+                <div class="cols" size="2">
+                    <div class="group required invert card-method">
+                        <label>Mês de Expiração</label>
+                        <select name="month" class="only-credit_card" id="mes-expiracao" required
+                                data-pristine-required-message="Campo obrigatório">
+                            <option value="" selected disabled>Mês</option>
+                        </select>
+                    </div>
+
+                    <div class="group required invert card-method">
+                        <label>Ano de Expiração</label>
+                        <select name="year" class="only-credit_card" id="ano-expiracao" required
+                                data-pristine-required-message="Campo obrigatório">
+                            <option value="" selected disabled>Ano</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="cols" size="2">
+                    <div class="group required invert card-method">
+                        <label>Cód. segurança</label>
+                        <input name="cvv" type="text" class="only-credit_card" required data-pristine-required-message="Campo obrigatório">
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <div class="accept-terms required">
+                        <label for="read">
+                            <input type="checkbox" name="read" id="read" required checked
+                                   data-pristine-required-message="Campo obrigatório">
+                            <div class="checkbox">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="16"
+                                     viewBox="0 0 28.934 28.858">
+                                    <path id="Path_249" data-name="Path 249"
+                                          d="M-811.376,847.273l11.235,16.3L-790.958,848l7.135-12.1"
+                                          transform="translate(812.072 -835.215)" fill="none" stroke="#FF6D00"
+                                          stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>
+                                    Afirmo que li e concordo com os <a href="" class="">termos e condições</a>.
+                                    <small>O plano é sem fidelização.</small></p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button type="submit">Concluir</button>
+                </div>
+
+            </form>
+        </section>
+    </div>
+</div>
+<!-- END: FORM -->
+
+<div class="response error" id="notify">
+    <div>
+        <p>Sucesso</p>
+    </div>
+</div>
+
+<div view="modal" id="success">
+    <div>
+        <header>
+            <img src="/images/OI.svg" alt="">
+            <h1>
+                OI MAIS<br />CONTROLE
+            </h1>
+            <a class="close" onclick="redirect({page: false, target: '#success'})">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18.008" height="18.008" viewBox="0 0 18.008 18.008">
+                    <g id="Group_1639" data-name="Group 1639" transform="translate(-286 -14)">
+                        <rect id="Rectangle_347" data-name="Rectangle 347" width="1.498" height="23.969" transform="translate(302.949 14) rotate(45)" fill="#FF6D00"></rect>
+                        <rect id="Rectangle_348" data-name="Rectangle 348" width="1.498" height="23.969" transform="translate(286 15.059) rotate(-45)" fill="#FF6D00"></rect>
+                    </g>
+                </svg>
+            </a>
+        </header>
+        <section class="content">
+            <div class="flex">
+                <h2>
+                    Parabéns
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="33.644" height="33.644" viewBox="0 0 33.644 33.644">
+                        <g id="Elipse_138" data-name="Elipse 138" fill="none" stroke="#ff6d00" stroke-width="2">
+                            <ellipse cx="16.822" cy="16.822" rx="16.822" ry="16.822" stroke="none"></ellipse>
+                            <ellipse cx="16.822" cy="16.822" rx="15.822" ry="15.822" fill="none"></ellipse>
+                        </g>
+                        <path id="Caminho_1652" data-name="Caminho 1652" d="M-811.376,841.159l6.349,7.538,5.189-7.2,4.032-5.6" transform="translate(820.876 -825.4)" fill="none" stroke="#ff6d00" stroke-width="2"></path>
+                    </svg>
+                </h2>
+            </div>
+
+            <p><strong>Seu pedido de adesão foi realizado com sucesso e</strong> sua linha já possui um plano Oi Controle.
+            </p>
+
+            <div class="flex paragraph">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35.116" height="43.723" viewBox="0 0 35.116 43.723">
+                    <g id="Grupo_2101" data-name="Grupo 2101" transform="translate(-97.418 -561.99)">
+                        <rect id="Retângulo_1434" data-name="Retângulo 1434" width="11.016" height="2.065" transform="translate(98.452 572.319)" fill="#ff6d00"></rect>
+                        <rect id="Retângulo_1435" data-name="Retângulo 1435" width="24.1" height="2.066" transform="translate(98.45 587.122)" fill="#ff6d00"></rect>
+                        <path id="Caminho_1612" data-name="Caminho 1612" d="M310.441,383.865a1.378,1.378,0,1,1-1.377-1.377,1.377,1.377,0,0,1,1.377,1.377" transform="translate(-206.826 208.421)" fill="#ff6d00"></path>
+                        <path id="Caminho_1613" data-name="Caminho 1613" d="M314.856,383.865a1.377,1.377,0,1,1-1.376-1.377,1.376,1.376,0,0,1,1.376,1.377" transform="translate(-207.11 208.421)" fill="#ff6d00"></path>
+                        <path id="Caminho_1614" data-name="Caminho 1614" d="M319.272,383.865a1.377,1.377,0,1,1-1.377-1.377,1.377,1.377,0,0,1,1.377,1.377" transform="translate(-207.395 208.421)" fill="#ff6d00"></path>
+                        <path id="Caminho_1615" data-name="Caminho 1615" d="M323.688,383.865a1.378,1.378,0,1,1-1.377-1.377,1.377,1.377,0,0,1,1.377,1.377" transform="translate(-207.679 208.421)" fill="#ff6d00"></path>
+                        <path id="Caminho_1616" data-name="Caminho 1616" d="M328.1,383.865a1.377,1.377,0,1,1-1.376-1.377,1.376,1.376,0,0,1,1.376,1.377" transform="translate(-207.964 208.421)" fill="#ff6d00"></path>
+                        <path id="Caminho_1617" data-name="Caminho 1617" d="M310.441,388.281a1.378,1.378,0,1,1-1.377-1.377,1.378,1.378,0,0,1,1.377,1.377" transform="translate(-206.826 208.137)" fill="#ff6d00"></path>
+                        <path id="Caminho_1618" data-name="Caminho 1618" d="M314.856,388.281a1.377,1.377,0,1,1-1.376-1.377,1.377,1.377,0,0,1,1.376,1.377" transform="translate(-207.11 208.137)" fill="#ff6d00"></path>
+                        <path id="Caminho_1619" data-name="Caminho 1619" d="M319.272,388.281A1.377,1.377,0,1,1,317.9,386.9a1.377,1.377,0,0,1,1.377,1.377" transform="translate(-207.395 208.137)" fill="#ff6d00"></path>
+                        <path id="Caminho_1620" data-name="Caminho 1620" d="M323.688,388.281a1.378,1.378,0,1,1-1.377-1.377,1.378,1.378,0,0,1,1.377,1.377" transform="translate(-207.679 208.137)" fill="#ff6d00"></path>
+                        <path id="Caminho_1624" data-name="Caminho 1624" d="M328.1,388.281a1.377,1.377,0,1,1-1.376-1.377,1.377,1.377,0,0,1,1.376,1.377" transform="translate(-207.964 208.137)" fill="#ff6d00"></path>
+                        <path id="Caminho_1625" data-name="Caminho 1625" d="M320.877,395.467H313.3a9.307,9.307,0,0,1-9.3-9.3V363.45a9.307,9.307,0,0,1,9.3-9.3h2.753v2.065H313.3a7.238,7.238,0,0,0-7.229,7.23v22.722a7.238,7.238,0,0,0,7.229,7.23h7.574a7.238,7.238,0,0,0,7.229-7.23v-17.9h2.066v17.9a9.306,9.306,0,0,1-9.3,9.3" transform="translate(-206.589 210.246)" fill="#ff6d00"></path>
+                        <rect id="Retângulo_1436" data-name="Retângulo 1436" width="15.836" height="2.065" transform="translate(113.599 561.991)" fill="#ff6d00"></rect>
+                        <path id="Caminho_1626" data-name="Caminho 1626" d="M317.848,367.071h3.525l2.5,2.493,2.493-2.493h11.454V353.645H317.848Zm6.021,5.414-3.35-3.349h-4.735V351.578h24.1v17.558H327.218Z" transform="translate(-207.347 210.412)" fill="#ff6d00"></path>
+                        <rect id="Retângulo_1437" data-name="Retângulo 1437" width="13.771" height="2.066" transform="translate(113.599 567.154)" fill="#ff6d00"></rect>
+                        <rect id="Retângulo_1438" data-name="Retângulo 1438" width="13.771" height="2.065" transform="translate(113.599 572.319)" fill="#ff6d00"></rect>
+                        <path id="Caminho_1621" data-name="Caminho 1621" d="M314.856,392.7a1.377,1.377,0,1,1-1.376-1.377,1.376,1.376,0,0,1,1.376,1.377" transform="translate(-207.11 207.852)" fill="#ff6d00"></path>
+                        <path id="Caminho_1622" data-name="Caminho 1622" d="M319.272,392.7a1.377,1.377,0,1,1-1.377-1.377,1.376,1.376,0,0,1,1.377,1.377" transform="translate(-207.395 207.852)" fill="#ff6d00"></path>
+                        <path id="Caminho_1623" data-name="Caminho 1623" d="M323.688,392.7a1.378,1.378,0,1,1-1.377-1.377,1.377,1.377,0,0,1,1.377,1.377" transform="translate(-207.679 207.852)" fill="#ff6d00"></path>
+                    </g>
+                </svg>
+
+                <p><strong>Em instantes, você receberá
+                    um SMS de confirmação
+                    de ativação do plano,</strong> contendo também detalhes sobre como resgatar os descontos disponíveis nas empresas parceiras.
                 </p>
             </div>
         </section>
     </div>
-    <!-- END: HOME -->
+</div>
 
-    <!-- BEGIN: MODAL -->
-    <div view="modal" id="adiantamento-recarga">
-        <div>
-            <header>
-                <img src="/images/OI.svg" alt="">
-                <h1>
-                    Adiantamento<br />
-                    de Recarga
-                </h1>
-                <a class="close" onclick="redirect({page: false, target: '#adiantamento-recarga'})">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18.008" height="18.008" viewBox="0 0 18.008 18.008">
-                        <g id="Group_1639" data-name="Group 1639" transform="translate(-286 -14)">
-                            <rect id="Rectangle_347" data-name="Rectangle 347" width="1.498" height="23.969"
-                                transform="translate(302.949 14) rotate(45)" fill="#FF6D00" />
-                            <rect id="Rectangle_348" data-name="Rectangle 348" width="1.498" height="23.969"
-                                transform="translate(286 15.059) rotate(-45)" fill="#FF6D00" />
-                        </g>
-                    </svg>
-                </a>
-            </header>
-            <section class="content">
-                <p style="margin-bottom: 0;">
-                    A Oi te adianta R$ 5,00 de recarga para você usar como quiser e na próxima recarga, você será
-                    debitado
-                    em apenas R$7,00 (R$5,00 do Adiantamento + R$2,00 de taxa de conveniência).
-                </p>
-                <p style="margin-top: 0;">
-                    Para contratar este serviço agora, envie um SMS com a palavra Oi para 3333 e aguarde o SMS de
-                    confirmação.
-                </p>
+<style type="text/css">
+    @font-face {
+        font-family: "Simplon Headline";
+        src: url("/fonts/simplonoi-headline.woff") format("woff");
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+    }
 
-                <a onclick="sms()" class="button" title="Eu quero">
-                    <span>Enviar SMS para contratar</span>
-                </a>
-            </section>
-        </div>
-    </div>
-    <!-- END: MODAL -->
-
-    <!-- BEGIN: MODAL -->
-    <div view="modal" id="plans">
-        <div>
-            <header>
-                <img src="/images/OI.svg" alt="">
-                <h1>
-                    é muito fácil<br />
-                    <span>ser controle</span>
-                </h1>
-                <a class="close" onclick="redirect({page: false, target: '#plans'})">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18.008" height="18.008" viewBox="0 0 18.008 18.008">
-                        <g id="Group_1639" data-name="Group 1639" transform="translate(-286 -14)">
-                            <rect id="Rectangle_347" data-name="Rectangle 347" width="1.498" height="23.969"
-                                  transform="translate(302.949 14) rotate(45)" fill="#FF6D00" />
-                            <rect id="Rectangle_348" data-name="Rectangle 348" width="1.498" height="23.969"
-                                  transform="translate(286 15.059) rotate(-45)" fill="#FF6D00" />
-                        </g>
-                    </svg>
-                </a>
-            </header>
-            <section class="plans content">
-            </section>
-        </div>
-    </div>
-    <!-- END: MODAL -->
-
-    <!-- BEGIN: FORM -->
-    <div view="modal" id="form">
-        <div>
-            <header>
-                <img src="/images/OI.svg" alt="">
-                <h1>
-                    OI MAIS CONTROLE<br />
-                    <span><i id="plan-class">BÁSICO</i> <i id="plan-data"></i></span>
-                    <small>Preencha seus dados para <br />confirmar a contratação:</small>
-                </h1>
-                <a class="close" onclick="redirect({page: false, target: '#form'})">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18.008" height="18.008" viewBox="0 0 18.008 18.008">
-                        <g id="Group_1639" data-name="Group 1639" transform="translate(-286 -14)">
-                            <rect id="Rectangle_347" data-name="Rectangle 347" width="1.498" height="23.969"
-                                transform="translate(302.949 14) rotate(45)" fill="#FF6D00" />
-                            <rect id="Rectangle_348" data-name="Rectangle 348" width="1.498" height="23.969"
-                                transform="translate(286 15.059) rotate(-45)" fill="#FF6D00" />
-                        </g>
-                    </svg>
-                </a>
-            </header>
-            <section class="content">
-                <form action="#" id="formElement" novalidate name="form" method="post">
-
-                    <div class="radio" id="radio">
-                        <div class="title">Método</div>
-                        <div class="radio-input">
-                            <label for="metodo-cartao" onclick="showmethod('cartao')">
-                                <input type="radio" id="metodo-cartao" name="method" value="cartao" checked>
-                                Cartão
-                            </label>
-                        </div>
-                        <div class="radio-input">
-                            <label for="metodo-boleto" onclick="showmethod('boleto')">
-                                <input type="radio" id="metodo-boleto" name="method" value="boleto">
-                                Boleto
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="group required" id="msisdn">
-                        <label>Telefone</label>
-                        <input type="text" name="msisdn" required maxlength="11" minlength="11"
-                            data-pristine-required-message="Campo obrigatório">
-                    </div>
-
-                    <div class="group required">
-                        <label>Número do cpf</label>
-                        <input name="cpf" type="text" required minlength="11" maxlength="11"
-                            data-pristine-required-message="Campo obrigatório">
-                    </div>
-
-                    <div class="group required card-method">
-                        <label>Data de Nascimento</label>
-                        <div class="date">
-                            <select name="bDay" class="only-credit_card" id="dia" required data-pristine-required-message="Campo obrigatório">
-                                <option value="" selected disabled>Dia</option>
-                            </select>
-                            <div class="slash">/</div>
-                            <select name="bMonth" class="only-credit_card" id="mes" required data-pristine-required-message="Campo obrigatório">
-                                <option value="" selected disabled>Mês</option>
-                            </select>
-                            <div class="slash">/</div>
-                            <select name="bYear" class="only-credit_card" id="ano" required data-pristine-required-message="Campo obrigatório">
-                                <option value="" selected disabled>Ano</option>
-                            </select>
-
-                        </div>
-                    </div>
-
-                    <div class="group required card-method">
-                        <label>CEP</label>
-                        <input name="cep" class="only-credit_card" type="text" minlength="8" maxlength="8" required
-                            data-pristine-required-message="Campo obrigatório">
-                    </div>
-
-                    <div class="group required invert card-method">
-                        <label>Número do Cartão</label>
-                        <input name="card_number" class="only-credit_card" type="text" minlength="16" maxlength="16" required
-                            data-pristine-required-message="Campo obrigatório">
-                    </div>
-
-                    <div class="cols" size="2">
-                        <div class="group required invert card-method">
-                            <label>Mês de Expiração</label>
-                            <select name="month" class="only-credit_card" id="mes-expiracao" required
-                                data-pristine-required-message="Campo obrigatório">
-                                <option value="" selected disabled>Mês</option>
-                            </select>
-                        </div>
-
-                        <div class="group required invert card-method">
-                            <label>Ano de Expiração</label>
-                            <select name="year" class="only-credit_card" id="ano-expiracao" required
-                                data-pristine-required-message="Campo obrigatório">
-                                <option value="" selected disabled>Ano</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="cols" size="2">
-                        <div class="group required invert card-method">
-                            <label>Cód. segurança</label>
-                            <input name="cvv" type="text" class="only-credit_card" required data-pristine-required-message="Campo obrigatório">
-                        </div>
-                    </div>
-
-                    <div class="form-footer">
-                        <div class="accept-terms required">
-                            <label for="read">
-                                <input type="checkbox" name="read" id="read" required checked
-                                    data-pristine-required-message="Campo obrigatório">
-                                <div class="checkbox">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="16"
-                                        viewBox="0 0 28.934 28.858">
-                                        <path id="Path_249" data-name="Path 249"
-                                            d="M-811.376,847.273l11.235,16.3L-790.958,848l7.135-12.1"
-                                            transform="translate(812.072 -835.215)" fill="none" stroke="#FF6D00"
-                                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p>
-                                        Afirmo que li e concordo com os <a href="" class="">termos e condições</a>.
-                                        <small>O plano é sem fidelização.</small></p>
-                                </div>
-                            </label>
-                        </div>
-
-                        <button type="submit">Concluir</button>
-                    </div>
-
-                </form>
-            </section>
-        </div>
-    </div>
-    <!-- END: FORM -->
-
-    <div class="response error" id="notify">
-        <div>
-            <p>Sucesso</p>
-        </div>
-    </div>
-
-    <style type="text/css">
-        @font-face {
-            font-family: "Simplon Headline";
-            src: url("/fonts/simplonoi-headline.woff") format("woff");
-            font-weight: 300;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: "Simplon";
-            src: url("/fonts/simplonbp-regular-webfont.woff") format("woff");
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-        }
-    </style>
-    <script type="text/javascript">
-        !function (e, r) { "object" == typeof exports && "undefined" != typeof module ? module.exports = r() : "function" == typeof define && define.amd ? define(r) : e.Pristine = r() }(this, function () { "use strict"; function e(e) { var r = arguments; return this.replace(/\${([^{}]*)}/g, function (e, t) { return r[t] }) } function r(e) { return e.pristine.self.form.querySelectorAll('input[name="' + e.getAttribute("name") + '"]:checked').length } function t(r, t, n) { function u(e, r, t, n) { var i = l[t]; if (i && (e.push(i), n)) { var s = n.split(","); s.unshift(null), r[t] = s } } function f(e) { if (e.errorElements) return e.errorElements; var r = function (e, r) { for (; (e = e.parentElement) && !e.classList.contains(r);); return e }(e.input, m.config.classTo), t = null, n = null; return (t = m.config.classTo === m.config.errorTextParent ? r : r.querySelector(m.errorTextParent)) && ((n = t.querySelector("." + s)) || ((n = document.createElement(m.config.errorTextTag)).className = s + " " + m.config.errorTextClass, t.appendChild(n), n.pristineDisplay = n.style.display)), e.errorElements = [r, n] } function c(e) { var r = f(e), t = r[0], n = r[1]; t && (t.classList.remove(m.config.successClass), t.classList.add(m.config.errorClass)), n && (n.innerHTML = e.errors.join("<br/>"), n.style.display = n.pristineDisplay || "") } function p(e) { var r = function (e) { var r = f(e), t = r[0], n = r[1]; return t && (t.classList.remove(m.config.errorClass), t.classList.remove(m.config.successClass)), n && (n.innerHTML = "", n.style.display = "none"), r }(e)[0]; r && r.classList.add(m.config.successClass) } var m = this; return function (e, r, t) { e.setAttribute("novalidate", "true"), m.form = e, m.config = function (e, r) { for (var t in r) t in e || (e[t] = r[t]); return e }(r || {}, i), m.live = !(!1 === t), m.fields = Array.from(e.querySelectorAll(a)).map(function (e) { var r = [], t = {}, n = {}; return [].forEach.call(e.attributes, function (e) { if (/^data-pristine-/.test(e.name)) { var i = e.name.substr(14); if (i.endsWith("-message")) return void (n[i.slice(0, i.length - 8)] = e.value); "type" === i && (i = e.value), u(r, t, i, e.value) } else ~o.indexOf(e.name) ? u(r, t, e.name, e.value) : "type" === e.name && u(r, t, e.value) }), r.sort(function (e, r) { return r.priority - e.priority }), m.live && e.addEventListener(~["radio", "checkbox"].indexOf(e.getAttribute("type")) ? "change" : "input", function (e) { m.validate(e.target) }.bind(m)), e.pristine = { input: e, validators: r, params: t, messages: n, self: m } }.bind(m)) }(r, t, n), m.validate = function (r, t) { t = r && !0 === t || !0 === r; var n = m.fields; !0 !== r && !1 !== r && (r instanceof HTMLElement ? n = [r.pristine] : (r instanceof NodeList || r instanceof (window.$ || Array) || r instanceof Array) && (n = Array.from(r).map(function (e) { return e.pristine }))); var i = !0; for (var s in n) { var a = n[s]; !function (r) { var t = [], n = !0; for (var i in r.validators) { var s = r.validators[i], a = r.params[s.name] ? r.params[s.name] : []; if (a[0] = r.input.value, !s.fn.apply(r.input, a)) { n = !1; var o = r.messages[s.name] || s.msg; if (t.push(e.apply(o, a)), !0 === s.halt) break } } return r.errors = t, n }(a) ? (i = !1, !t && c(a)) : !t && p(a) } return i }, m.getErrors = function (e) { if (!e) { for (var r = [], t = 0; t < m.fields.length; t++) { var n = m.fields[t]; n.errors.length && r.push({ input: n.input, errors: n.errors }) } return r } return e.length ? e[0].pristine.errors : e.pristine.errors }, m.addValidator = function (e, r, t, n, i) { e instanceof HTMLElement ? (e.pristine.validators.push({ fn: r, msg: t, priority: n, halt: i }), e.pristine.validators.sort(function (e, r) { return r.priority - e.priority })) : console.warn("The parameter elem must be a dom element") }, m.addError = function (e, r) { (e = e.length ? e[0] : e).pristine.errors.push(r), c(e.pristine) }, m.reset = function () { for (var e in m.fields) m.fields[e].errorElements = null; Array.from(m.form.querySelectorAll("." + s)).map(function (e) { e.parentNode.removeChild(e) }), Array.from(m.form.querySelectorAll("." + m.config.classTo)).map(function (e) { e.classList.remove(m.config.successClass), e.classList.remove(m.config.errorClass) }) }, m.destroy = function () { m.reset(), m.fields.forEach(function (e) { delete e.input.pristine }), m.fields = [] }, m.setGlobalConfig = function (e) { i = e }, m } var n = { required: "This field is required", email: "This field requires a valid e-mail address", number: "This field requires a number", url: "This field requires a valid website URL", tel: "This field requires a valid telephone number", maxlength: "This fields length must be < ${1}", minlength: "This fields length must be> ${1}", min: "Minimum value for this field is ${1}", max: "Maximum value for this field is ${1}", pattern: "Input must match the pattern ${1}" }, i = { classTo: "form-group", errorClass: "has-danger", successClass: "has-success", errorTextParent: "form-group", errorTextTag: "div", errorTextClass: "text-help" }, s = "pristine-error", a = "input:not([type^=hidden]):not([type^=submit]), select, textarea", o = ["required", "min", "max", "minlength", "maxlength", "pattern"], l = {}, u = function (e, r) { r.name = e, r.msg || (r.msg = n[e]), void 0 === r.priority && (r.priority = 1), l[e] = r }; return u("text", { fn: function (e) { return !0 }, priority: 0 }), u("required", { fn: function (e) { return "radio" === this.type || "checkbox" === this.type ? r(this) : void 0 !== e && "" !== e }, priority: 99, halt: !0 }), u("email", { fn: function (e) { return !e || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) } }), u("number", { fn: function (e) { return !e || !isNaN(parseFloat(e)) }, priority: 2 }), u("integer", { fn: function (e) { return e && /^\d+$/.test(e) } }), u("minlength", { fn: function (e, r) { return !e || e.length>= parseInt(r) } }), u("maxlength", { fn: function (e, r) { return !e || e.length <= parseInt(r) } }), u("min", { fn: function (e, t) { return !e || ("checkbox" === this.type ? r(this)>= parseInt(t) : parseFloat(e)>= parseFloat(t)) } }), u("max", { fn: function (e, t) { return !e || ("checkbox" === this.type ? r(this) <= parseInt(t) : parseFloat(e) <= parseFloat(t)) } }), u("pattern", { fn: function (e, r) { var t = r.match(new RegExp("^/(.*?)/([gimy]*)$")); return !e || new RegExp(t[1], t[2]).test(e) } }), t.addValidator = function (e, r, t, n, i) { u(e, { fn: r, msg: t, priority: n, halt: i }) }, t });
-    </script>
-    <script type="text/javascript" src="js/base.js"></script>
+    @font-face {
+        font-family: "Simplon";
+        src: url("/fonts/simplonbp-regular-webfont.woff") format("woff");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+    }
+</style>
+<script type="text/javascript">
+    !function (e, r) { "object" == typeof exports && "undefined" != typeof module ? module.exports = r() : "function" == typeof define && define.amd ? define(r) : e.Pristine = r() }(this, function () { "use strict"; function e(e) { var r = arguments; return this.replace(/\${([^{}]*)}/g, function (e, t) { return r[t] }) } function r(e) { return e.pristine.self.form.querySelectorAll('input[name="' + e.getAttribute("name") + '"]:checked').length } function t(r, t, n) { function u(e, r, t, n) { var i = l[t]; if (i && (e.push(i), n)) { var s = n.split(","); s.unshift(null), r[t] = s } } function f(e) { if (e.errorElements) return e.errorElements; var r = function (e, r) { for (; (e = e.parentElement) && !e.classList.contains(r);); return e }(e.input, m.config.classTo), t = null, n = null; return (t = m.config.classTo === m.config.errorTextParent ? r : r.querySelector(m.errorTextParent)) && ((n = t.querySelector("." + s)) || ((n = document.createElement(m.config.errorTextTag)).className = s + " " + m.config.errorTextClass, t.appendChild(n), n.pristineDisplay = n.style.display)), e.errorElements = [r, n] } function c(e) { var r = f(e), t = r[0], n = r[1]; t && (t.classList.remove(m.config.successClass), t.classList.add(m.config.errorClass)), n && (n.innerHTML = e.errors.join("<br/>"), n.style.display = n.pristineDisplay || "") } function p(e) { var r = function (e) { var r = f(e), t = r[0], n = r[1]; return t && (t.classList.remove(m.config.errorClass), t.classList.remove(m.config.successClass)), n && (n.innerHTML = "", n.style.display = "none"), r }(e)[0]; r && r.classList.add(m.config.successClass) } var m = this; return function (e, r, t) { e.setAttribute("novalidate", "true"), m.form = e, m.config = function (e, r) { for (var t in r) t in e || (e[t] = r[t]); return e }(r || {}, i), m.live = !(!1 === t), m.fields = Array.from(e.querySelectorAll(a)).map(function (e) { var r = [], t = {}, n = {}; return [].forEach.call(e.attributes, function (e) { if (/^data-pristine-/.test(e.name)) { var i = e.name.substr(14); if (i.endsWith("-message")) return void (n[i.slice(0, i.length - 8)] = e.value); "type" === i && (i = e.value), u(r, t, i, e.value) } else ~o.indexOf(e.name) ? u(r, t, e.name, e.value) : "type" === e.name && u(r, t, e.value) }), r.sort(function (e, r) { return r.priority - e.priority }), m.live && e.addEventListener(~["radio", "checkbox"].indexOf(e.getAttribute("type")) ? "change" : "input", function (e) { m.validate(e.target) }.bind(m)), e.pristine = { input: e, validators: r, params: t, messages: n, self: m } }.bind(m)) }(r, t, n), m.validate = function (r, t) { t = r && !0 === t || !0 === r; var n = m.fields; !0 !== r && !1 !== r && (r instanceof HTMLElement ? n = [r.pristine] : (r instanceof NodeList || r instanceof (window.$ || Array) || r instanceof Array) && (n = Array.from(r).map(function (e) { return e.pristine }))); var i = !0; for (var s in n) { var a = n[s]; !function (r) { var t = [], n = !0; for (var i in r.validators) { var s = r.validators[i], a = r.params[s.name] ? r.params[s.name] : []; if (a[0] = r.input.value, !s.fn.apply(r.input, a)) { n = !1; var o = r.messages[s.name] || s.msg; if (t.push(e.apply(o, a)), !0 === s.halt) break } } return r.errors = t, n }(a) ? (i = !1, !t && c(a)) : !t && p(a) } return i }, m.getErrors = function (e) { if (!e) { for (var r = [], t = 0; t < m.fields.length; t++) { var n = m.fields[t]; n.errors.length && r.push({ input: n.input, errors: n.errors }) } return r } return e.length ? e[0].pristine.errors : e.pristine.errors }, m.addValidator = function (e, r, t, n, i) { e instanceof HTMLElement ? (e.pristine.validators.push({ fn: r, msg: t, priority: n, halt: i }), e.pristine.validators.sort(function (e, r) { return r.priority - e.priority })) : console.warn("The parameter elem must be a dom element") }, m.addError = function (e, r) { (e = e.length ? e[0] : e).pristine.errors.push(r), c(e.pristine) }, m.reset = function () { for (var e in m.fields) m.fields[e].errorElements = null; Array.from(m.form.querySelectorAll("." + s)).map(function (e) { e.parentNode.removeChild(e) }), Array.from(m.form.querySelectorAll("." + m.config.classTo)).map(function (e) { e.classList.remove(m.config.successClass), e.classList.remove(m.config.errorClass) }) }, m.destroy = function () { m.reset(), m.fields.forEach(function (e) { delete e.input.pristine }), m.fields = [] }, m.setGlobalConfig = function (e) { i = e }, m } var n = { required: "This field is required", email: "This field requires a valid e-mail address", number: "This field requires a number", url: "This field requires a valid website URL", tel: "This field requires a valid telephone number", maxlength: "This fields length must be < ${1}", minlength: "This fields length must be> ${1}", min: "Minimum value for this field is ${1}", max: "Maximum value for this field is ${1}", pattern: "Input must match the pattern ${1}" }, i = { classTo: "form-group", errorClass: "has-danger", successClass: "has-success", errorTextParent: "form-group", errorTextTag: "div", errorTextClass: "text-help" }, s = "pristine-error", a = "input:not([type^=hidden]):not([type^=submit]), select, textarea", o = ["required", "min", "max", "minlength", "maxlength", "pattern"], l = {}, u = function (e, r) { r.name = e, r.msg || (r.msg = n[e]), void 0 === r.priority && (r.priority = 1), l[e] = r }; return u("text", { fn: function (e) { return !0 }, priority: 0 }), u("required", { fn: function (e) { return "radio" === this.type || "checkbox" === this.type ? r(this) : void 0 !== e && "" !== e }, priority: 99, halt: !0 }), u("email", { fn: function (e) { return !e || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) } }), u("number", { fn: function (e) { return !e || !isNaN(parseFloat(e)) }, priority: 2 }), u("integer", { fn: function (e) { return e && /^\d+$/.test(e) } }), u("minlength", { fn: function (e, r) { return !e || e.length>= parseInt(r) } }), u("maxlength", { fn: function (e, r) { return !e || e.length <= parseInt(r) } }), u("min", { fn: function (e, t) { return !e || ("checkbox" === this.type ? r(this)>= parseInt(t) : parseFloat(e)>= parseFloat(t)) } }), u("max", { fn: function (e, t) { return !e || ("checkbox" === this.type ? r(this) <= parseInt(t) : parseFloat(e) <= parseFloat(t)) } }), u("pattern", { fn: function (e, r) { var t = r.match(new RegExp("^/(.*?)/([gimy]*)$")); return !e || new RegExp(t[1], t[2]).test(e) } }), t.addValidator = function (e, r, t, n, i) { u(e, { fn: r, msg: t, priority: n, halt: i }) }, t });
+</script>
+<script type="text/javascript" src="js/base.js"></script>
 </body>
 
 </html>

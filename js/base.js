@@ -7,7 +7,7 @@ var PLAN_SELECTED = "";
 var GROUP_SELECTED = "";
 
 var LP = {
-    title: 'Oi Vantagens',
+    title: 'Oi Vantagens - Migre',
     headers: 'http://clic.news/headers/',
     baseUrl: 'http://api.oston.io/oi-fidelidade/v2',
     analytics_url: BASE_URL + "interactions",
@@ -31,6 +31,7 @@ var LP = {
 document.title = LP.title;
 LP.price.innerText = localStorage.getItem('price');
 localStorage.setItem('REFERER', LP.ref);
+
 
 
 document.onreadystatechange = function () {
@@ -161,17 +162,17 @@ function getPlans(ddd) {
     var linkGroupPlans = BASE_URL + "plans?areaCode=" + ddd + "&groupBy=class";
 
     request({ url: linkGroupPlans }).then(function(data) {
-            if (data.length) {
-                let response = JSON.parse(data);
-                localStorage.setItem('price', response[0].price);
-                localStorage.setItem('plans', data);
-                LP.price.innerText = localStorage.getItem('price');
-            } else {
-                throw "Nenhum plano encontrado.";
-            }
-        }).catch(function(err) {
-            console.error('=> An error occurred when getPlans: ', err);
-        });
+        if (data.length) {
+            let response = JSON.parse(data);
+            localStorage.setItem('price', response[0][0].price);
+            localStorage.setItem('plans', data);
+            LP.price.innerText = localStorage.getItem('price');
+        } else {
+            throw "Nenhum plano encontrado.";
+        }
+    }).catch(function(err) {
+        console.error('=> An error occurred when getPlans: ', err);
+    });
 }
 
 function ddd(msisdn) {
@@ -370,9 +371,9 @@ window.onload = function () {
                 if (valid) {
                     payBoleto(form, cpf).then(function(res) {
 
-                        flashMessage('Seu pedido foi efetuado com sucesso, você irá receber um SMS com instruções');
-
+                        // flashMessage('Seu pedido foi efetuado com sucesso, você irá receber um SMS com instruções');
                         goHome();
+                        redirect({page: false, target: '#success'})
 
                         SUBMIT = false;
                         form.reset();
@@ -408,9 +409,9 @@ window.onload = function () {
                             "plan_code": PLAN_SELECTED.code
                         })
                     }).then(function(res) {
-                        flashMessage('Seu pedido foi efetuado com sucesso, você irá receber um SMS com instruções');
-
+                        // flashMessage('Seu pedido foi efetuado com sucesso, você irá receber um SMS com instruções');
                         goHome();
+                        redirect({page: false, target: '#success'})
 
                         SUBMIT = false;
                         form.reset();
@@ -424,6 +425,9 @@ window.onload = function () {
         }
 
     });
+
+    var a = document.querySelector('.migre-controle');
+    a.removeAttribute('style')
 
 };
 
@@ -451,9 +455,12 @@ var article = function (plan, index) {
         tenths: (price[1]).length === 1 ? price[1] + "0" : price[1]
     };
 
+    var text = plan.name.split(' ');
+    text = text[text.length - 1];
+
     return '<article class="plan" onclick="selectPlan(this, \'' + index + '\')">' +
         '<header>' +
-        '<p><small>'+ plan.name +'</small> '+ plan.data_in_gb +'GB' +
+        '<p><small>'+ text +'</small> '+ plan.data_in_gb +'GB' +
         '</p>' +
         '</header>' +
         '<div class="plan-content">' +
@@ -477,15 +484,15 @@ var article = function (plan, index) {
 var apps = function (apps) {
     var a = '';
     if (apps.toLowerCase().includes('whatsapp'))
-        a += '<figure><img src="/images/whatsapp-icon.svg" alt="Whatsapp"></figure>';
+        a += '<figure><img src="/fb/images/whatsapp-icon.svg" alt="Whatsapp"></figure>';
     if (apps.toLowerCase().includes('messenger'))
-        a += '<figure><img src="/images/messenger-icon.svg" alt="Messenger"></figure>';
+        a += '<figure><img src="/fb/images/messenger-icon.svg" alt="Messenger"></figure>';
     if (apps.toLowerCase().includes('instagram'))
-        a += '<figure><img src="/images/instagram-icon.svg" alt="Instagram"></figure>';
+        a += '<figure><img src="/fb/images/instagram-icon.svg" alt="Instagram"></figure>';
     if (apps.toLowerCase().includes('netflix'))
-        a += '<figure><img src="/images/netflix-icon.svg" alt=""></figure>';
+        a += '<figure><img src="/fb/images/netflix-icon.svg" alt="Netflix"></figure>';
     if (apps.toLowerCase().includes('facebook'))
-        a += '<figure><img src="/images/facebook-icon.svg" alt=""></figure>';
+        a += '<figure><img src="/fb/images/facebook-icon.svg" alt="Facebook"></figure>';
 
     return a;
 };
@@ -503,6 +510,25 @@ var articles = function(obj) {
     })
 
 };
+
+function redirect(obj) {
+    if (!obj.page) {
+        document.querySelector(obj.target).classList.toggle('active');
+    } else {
+        window.open(obj.url, "_blank")
+    }
+
+    articles(localStorage.getItem('plans'));
+
+    if (!!obj.analytics) {
+        analytics({
+            to: obj.analytics.to,
+            from: obj.analytics.from,
+            gaTo: obj.analytics.gaTo,
+            gaFrom: obj.analytics.gaFrom
+        })
+    }
+}
 
 
 function showmethod(el) {
